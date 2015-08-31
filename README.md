@@ -8,7 +8,11 @@
 ## Usage
 
 ```swift
-<API>
+func create(id: String, fireDate: NSDate, soundName: String? = nil, message: String, actionTitle: String? = nil)
+
+func find(id: String) -> UILocalNotification?
+
+func delete(id: String)
 ```
 
 ## Installation
