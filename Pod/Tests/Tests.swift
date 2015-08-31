@@ -3,8 +3,7 @@ import XCTest
 
 class Tests: XCTestCase {
 
-  func testFailing() {
-    let ofCourse = true
-    XCTAssertEqual(ofCourse, false)
+  func testCreate() {
+    Notification.create("", seconds: 1, soundName: "", message: "", actionTitle: "")
   }
 }
