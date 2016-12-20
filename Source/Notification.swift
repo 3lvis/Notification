@@ -4,28 +4,29 @@ public struct Notification {
     static let IDKey = "IDKey"
     static let FireDateKey = "FireDateKey"
 
-    public static func create(id: String, fireDate: NSDate, soundName: String? = nil, message: String, actionTitle: String? = nil) {
+    public static func create(_ id: String, fireDate: Date, soundName: String? = nil, message: String, actionTitle: String? = nil) {
         let notification = UILocalNotification()
         notification.soundName = soundName
 
         notification.fireDate = fireDate
-        notification.timeZone = NSTimeZone.defaultTimeZone()
+        notification.timeZone = TimeZone.current
         notification.alertBody = message
         notification.alertAction = actionTitle
         if actionTitle == nil {
             notification.hasAction = false
         }
 
-        var userInfo = [NSObject : AnyObject]()
+        var userInfo = [AnyHashable: Any]()
         userInfo[Notification.IDKey] = id
-        userInfo[Notification.FireDateKey] = NSDate()
+        userInfo[Notification.FireDateKey] = Date()
         notification.userInfo = userInfo
 
-        UIApplication.sharedApplication().scheduleLocalNotification(notification)
+        UIApplication.shared.scheduleLocalNotification(notification)
     }
 
-    public static func find(id: String) -> UILocalNotification? {
-        for notification in UIApplication.sharedApplication().scheduledLocalNotifications as! [UILocalNotification] {
+    public static func find(_ id: String) -> UILocalNotification? {
+        let notifications = UIApplication.shared.scheduledLocalNotifications ?? [UILocalNotification]()
+        for notification in notifications {
             if let userInfo = notification.userInfo {
                 if let key = userInfo[Notification.IDKey] as? String {
                     if key == id {
@@ -38,9 +39,9 @@ public struct Notification {
         return nil
     }
 
-    public static func delete(id: String) {
+    public static func delete(_ id: String) {
         if let notification = find(id) {
-            UIApplication.sharedApplication().cancelLocalNotification(notification)
+            UIApplication.shared.cancelLocalNotification(notification)
         }
     }
 }
